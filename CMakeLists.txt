@@ -12,7 +12,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_executable(${PROJECT_NAME})
 
 set(SRC_FILES
-	"src/main.cpp"
-)
+ "src/main.cpp"
+ "src/ECS/Entity.h")
 
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
