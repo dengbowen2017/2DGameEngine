@@ -16,3 +16,7 @@ set(SRC_FILES
  "src/ECS/Entity.h")
 
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+ $<$<CONFIG:Debug>:GE_DEBUG>
+ $<$<CONFIG:Release>:GE_RELEASE>)
