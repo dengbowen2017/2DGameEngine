@@ -13,7 +13,10 @@ add_executable(${PROJECT_NAME})
 
 set(SRC_FILES
  "src/main.cpp"
- "src/ECS/Entity.h")
+ "src/ECS/Registry.h"
+ "src/ECS/Entity.h" 
+ "src/ECS/EntityManager.h" 
+ )
 
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
 

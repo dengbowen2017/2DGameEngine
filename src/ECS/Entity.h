@@ -11,28 +11,28 @@
 
 namespace ECS
 {
-	using EntityType = uint32_t;
+	using EntityDataType = uint32_t;
 
-	enum class Entity : EntityType;
+	enum class Entity : EntityDataType;
 
 	struct EntityTrait
 	{
-		static constexpr EntityType kBitShift = 20;
-		static constexpr EntityType kIndexMask = (1U << kBitShift) - 1;
-		static constexpr EntityType kNullEntity = kIndexMask;
+		static constexpr EntityDataType kBitShift = 20;
+		static constexpr EntityDataType kIndexMask = (1U << kBitShift) - 1;
+		static constexpr EntityDataType kNullEntity = kIndexMask;
 		static constexpr size_t kInitEntityNum = 10000;
 
-		static EntityType GetVersion(Entity entity)
+		static EntityDataType GetVersion(Entity entity)
 		{
-			return static_cast<EntityType>(entity) >> kBitShift;
+			return static_cast<EntityDataType>(entity) >> kBitShift;
 		}
 
-		static EntityType GetIndex(Entity entity)
+		static EntityDataType GetIndex(Entity entity)
 		{
-			return static_cast<EntityType>(entity) & kIndexMask;
+			return static_cast<EntityDataType>(entity) & kIndexMask;
 		}
 
-		static Entity Combine(EntityType version, EntityType index)
+		static Entity Combine(EntityDataType version, EntityDataType index)
 		{
 			return static_cast<Entity>((version << kBitShift) | index);
 		}
