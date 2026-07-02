@@ -32,7 +32,7 @@ namespace ECS
 		{
 			if (free_list_ == EntityTrait::kNullEntity)
 			{
-				Entity new_entity = EntityTrait::Combine(1, entities_.size());
+				Entity new_entity = EntityTrait::Combine(0, entities_.size());
 				entities_.push_back(new_entity);
 				return new_entity;
 			}
