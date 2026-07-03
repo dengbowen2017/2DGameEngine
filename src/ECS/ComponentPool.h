@@ -11,16 +11,19 @@ namespace ECS
 	public:
 		virtual ~BaseComponentPool() = default;
 
+		virtual bool Contain(Entity entity) = 0;
+		virtual void Remove(Entity entity) = 0;
+
 	protected:
 		static size_t Next()
 		{
-			static int count = 0;
+			static size_t count = 0;
 			return count++;
 		}
 	};
 
 	template <typename Component>
-	class ComponentPool : BaseComponentPool
+	class ComponentPool : public BaseComponentPool
 	{
 	public:
 		ComponentPool()
@@ -32,11 +35,11 @@ namespace ECS
 
 		static size_t ID()
 		{
-			static int id = Next();
+			static size_t id = Next();
 			return id;
 		}
 
-		bool Contain(Entity entity)
+		virtual bool Contain(Entity entity) override
 		{
 			EntityDataType index = EntityTrait::GetIndex(entity);
 			if (index < sparse_.size())
@@ -66,7 +69,7 @@ namespace ECS
 			return components_.back();
 		}
 
-		void Remove(Entity entity)
+		virtual void Remove(Entity entity) override
 		{
 			ECS_ASSERT(Contain(entity));
 

@@ -15,7 +15,7 @@ namespace ECS
 			entities_.reserve(EntityTrait::kInitEntityNum);
 		}
 
-		bool Valide(Entity entity)
+		bool Valid(Entity entity)
 		{
 			EntityDataType index = EntityTrait::GetIndex(entity);
 			if (index < entities_.size())
@@ -48,7 +48,7 @@ namespace ECS
 
 		void Destory(Entity entity)
 		{
-			ECS_ASSERT(Valide(entity));
+			ECS_ASSERT(Valid(entity));
 
 			EntityDataType index = EntityTrait::GetIndex(entity);
 			EntityDataType version = EntityTrait::GetVersion(entity);

@@ -1,7 +1,6 @@
 #include <iostream>
 
-#include "ECS/EntityManager.h"
-#include "ECS/ComponentPool.h"
+#include "ECS/Registry.h"
 
 using namespace ECS;
 
@@ -19,7 +18,7 @@ struct TestComp
 	{}
 };
 
-struct tmpe
+struct tmp
 {
 	float x;
 };
@@ -32,45 +31,23 @@ struct T3
 
 int main()
 {	
-	EntityManager mgr;
-	Entity e1 = mgr.Generate();
-	bool b1 = mgr.Valide(e1);
-	Entity e2 = mgr.Generate();
-	Entity e3 = mgr.Generate();
-	Entity e4 = mgr.Generate();
-	Entity e5 = mgr.Generate();
+	Registry reg;
 
-	//mgr.Destory(e4);
-	//mgr.Destory(e1);
+	Entity e1 = reg.Create();
+	Entity e2 = reg.Create();
+	Entity e3 = reg.Create();
 
-	//bool b2 = mgr.Valide(e4);
+	decltype(auto) c1 = reg.Emplace<TestComp>(e1, 1.f, 1.f);
+	decltype(auto) c2 = reg.Emplace<T3>(e1);
 
-	//Entity e6 = mgr.Generate();
-	//Entity e7 = mgr.Generate();
-	//Entity e8 = mgr.Generate();
+	decltype(auto) c3 = reg.Get<TestComp>(e1);
 
+	reg.Emplace<TestComp>(e2, 2.f, 2.f);
 
-	ComponentPool<TestComp> p1;
+	reg.Emplace<T3>(e2);
+	reg.Emplace<TestComp>(e3);
 
-	int id1 = ComponentPool<TestComp>::ID();
-	int id2 = ComponentPool<TestComp>::ID();
-
-	int id3 = ComponentPool<T3>::ID();
-	int id4 = ComponentPool<T3>::ID();
-
-	int id5 = ComponentPool<tmpe>::ID();
-	int id6 = ComponentPool<tmpe>::ID();
-	int id7 = ComponentPool<tmpe>::ID();
-
-	p1.Emplace(e1, 1.0f, 1.0f);
-	p1.Emplace(e2, 2.f, 2.f);
-	p1.Emplace(e3, 3.f, 3.f);
-	p1.Emplace(e5);
-
-	for (auto entity : p1)
-	{
-		std::cout << static_cast<uint32_t>(entity) << std::endl;
-	}
+	reg.Destory(e1);
 
 	return 0;
 }
