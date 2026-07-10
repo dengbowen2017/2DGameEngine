@@ -3,7 +3,8 @@
 #include <memory>
 
 #include "EntityManager.h"
-#include "ComponentPool.h"
+#include "ComponentManager.h"
+#include "View.h"
 
 namespace ECS
 {
@@ -17,7 +18,7 @@ namespace ECS
 			return entity_mgr_.Generate();
 		}
 
-		bool Valid(Entity entity)
+		bool Valid(Entity entity) const 
 		{
 			return entity_mgr_.Valid(entity);
 		}
@@ -26,77 +27,53 @@ namespace ECS
 		{
 			ECS_ASSERT(Valid(entity));
 
-			for (auto& pool : component_pools_)
-			{
-				if (pool->Contain(entity))
-				{
-					pool->Remove(entity);
-				}
-			}
+			component_mgr_.Clear(entity);
+			entity_mgr_.Destory(entity);
 		}
 
 		template<typename Component>
 		Component& Get(Entity entity)
 		{
 			ECS_ASSERT(Valid(entity));
-			return GetPool<Component>()->Get(entity);
+			return component_mgr_.Get<Component>(entity);
 		}
 
 		template<typename Component>
 		const Component& Get(Entity entity) const
 		{
 			ECS_ASSERT(Valid(entity));
-			return GetPool<Component>()->Get(entity);
+			return component_mgr_.Get<Component>(entity);
 		}
 
 		template<typename Component>
-		bool Contain(Entity entity)
+		bool Contain(Entity entity) const
 		{
 			ECS_ASSERT(Valid(entity));
-			return GetPool<Component>()->Contain(entity);
+			return component_mgr_.Contain(entity);
 		}
 
 		template<typename Component, typename... Args>
 		Component& Emplace(Entity entity, Args&&... args)
 		{
 			ECS_ASSERT(Valid(entity));
-			return AssurePool<Component>().Emplace(entity, std::forward<Args>(args)...);
+			return component_mgr_.Emplace<Component>(entity, std::forward<Args>(args)...);
 		}
 
 		template<typename Component>
 		void Erase(Entity entity)
 		{
 			ECS_ASSERT(Valid(entity));
-			return GetPool<Component>()->Remove(entity);
+			return component_mgr_.Erase<Component>(entity);
 		}
 
-		//template<typename... Component>
-		//void View()
-		//{
-
-		//}
+		template<typename... Components>
+		PoolView<Components...> View()
+		{
+			return PoolView<Components...>(component_mgr_.GetPool<Components>()...);
+		}
 
 	private:
-		template<typename Component>
-		ComponentPool<Component>& AssurePool()
-		{
-			size_t pool_id = ComponentPool<Component>::ID();
-			if (pool_id >= component_pools_.size())
-			{
-				component_pools_.resize(pool_id + 1);
-				component_pools_[pool_id] = std::make_unique<ComponentPool<Component>>();
-			}
-			return *static_cast<ComponentPool<Component>*>(component_pools_[pool_id].get());
-		}
-
-		template<typename Component>
-		ComponentPool<Component>* GetPool()
-		{
-			ECS_ASSERT(ComponentPool<Component>::ID() < component_pools_.size());
-			return static_cast<ComponentPool<Component>*>(component_pools_[ComponentPool<Component>::ID()].get());
-		}
-
 		EntityManager entity_mgr_;
-		std::vector<std::unique_ptr<BaseComponentPool>> component_pools_;
+		ComponentManager component_mgr_;
 	};
 }

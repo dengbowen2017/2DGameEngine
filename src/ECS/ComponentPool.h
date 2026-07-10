@@ -11,8 +11,9 @@ namespace ECS
 	public:
 		virtual ~BaseComponentPool() = default;
 
-		virtual bool Contain(Entity entity) = 0;
+		virtual bool Contain(Entity entity) const = 0;
 		virtual void Remove(Entity entity) = 0;
+		virtual size_t Size() = 0;
 
 	protected:
 		static size_t Next()
@@ -39,7 +40,7 @@ namespace ECS
 			return id;
 		}
 
-		virtual bool Contain(Entity entity) override
+		virtual bool Contain(Entity entity) const override
 		{
 			EntityDataType index = EntityTrait::GetIndex(entity);
 			if (index < sparse_.size())
@@ -60,10 +61,10 @@ namespace ECS
 			EntityDataType index = EntityTrait::GetIndex(entity);
 			if (index >= sparse_.size())
 			{
-				sparse_.resize(index + 1, EntityTrait::kNullEntity);
+				sparse_.resize(index, EntityTrait::kNullEntity);
 			}
 			
-			sparse_[index] = dense_.size();
+			sparse_.push_back(dense_.size());
 			dense_.push_back(entity);
 			components_.emplace_back(std::forward<Args>(args)...);
 			return components_.back();
@@ -101,10 +102,15 @@ namespace ECS
 			return components_[sparse_[index]];
 		}
 
+		virtual size_t Size() override
+		{
+			return components_.size();
+		}
+
 	public:
-		using iterator = std::vector<Entity>::iterator;
-		iterator begin() { return dense_.begin(); }
-		iterator end() { return dense_.end(); }
+		using iterator = std::vector<Entity>::const_iterator;
+		iterator begin() const { return dense_.begin(); }
+		iterator end() const { return dense_.end(); }
 
 	private:
 		std::vector<EntityDataType> sparse_;

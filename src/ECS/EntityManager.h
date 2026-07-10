@@ -15,7 +15,7 @@ namespace ECS
 			entities_.reserve(EntityTrait::kInitEntityNum);
 		}
 
-		bool Valid(Entity entity)
+		bool Valid(Entity entity) const 
 		{
 			EntityDataType index = EntityTrait::GetIndex(entity);
 			if (index < entities_.size())

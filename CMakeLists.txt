@@ -16,7 +16,9 @@ set(SRC_FILES
  "src/ECS/Registry.h"
  "src/ECS/Entity.h" 
  "src/ECS/EntityManager.h" 
- "src/ECS/ComponentPool.h")
+ "src/ECS/ComponentPool.h" 
+ "src/ECS/View.h" 
+ "src/ECS/ComponentManager.h")
 
 target_sources(${PROJECT_NAME} PRIVATE ${SRC_FILES})
 
