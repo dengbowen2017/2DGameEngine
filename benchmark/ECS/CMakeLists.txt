@@ -1,8 +1,8 @@
 add_executable(ECS_benchmark
- "benchmark.cpp"
+	"benchmark.cpp"
 )
 
 target_link_libraries(ECS_benchmark
- ECS_lib
- benchmark::benchmark_main
+	ECS_lib
+	benchmark::benchmark_main
 )

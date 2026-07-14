@@ -1,10 +1,10 @@
 add_executable(ECS_test
- "test.cpp"
+	"test.cpp"
 )
 
 target_link_libraries(ECS_test
- ECS_lib
- GTest::gtest_main
+	ECS_lib
+	GTest::gtest_main
 )
 
 include(GoogleTest)

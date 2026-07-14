@@ -92,5 +92,4 @@ namespace ECS
 		pool_iterator min_pool_begin_iterator;
 		pool_iterator min_pool_end_iterator;
 	};
-
 }

@@ -1,65 +1,70 @@
-#include <iostream>
+#include <imgui.h>
+#include <imgui_impl_sdl3.h>
+#include <imgui_impl_sdlrenderer3.h>
+#include <SDL3/SDL.h>
+#include <stdio.h>
 
-#include "ECS/Registry.h"
+int main(int, char**) {
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
+        printf("Error: SDL_Init(): %s\n", SDL_GetError());
+        return -1;
+    }
 
-using namespace ECS;
+    SDL_Window* window = SDL_CreateWindow("Dear ImGui + SDL3 Example", 1280, 720, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    if (!window) {
+        printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
+        return -1;
+    }
 
-struct TestComp
-{
-	float x;
-	float y;
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, nullptr);
+    SDL_SetRenderVSync(renderer, 1);
 
-	TestComp()
-		:x(0), y(0)
-	{}
+    if (!renderer) {
+        SDL_Log("Error: SDL_CreateRenderer(): %s\n", SDL_GetError());
+        return -1;
+    }
 
-	TestComp(float x_, float y_)
-		:x(x_), y(y_)
-	{}
-};
+    SDL_ShowWindow(window);
 
-struct tmp
-{
-	float x;
-};
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
-struct T3
-{
-	int x;
-};
+    ImGui_ImplSDL3_InitForSDLRenderer(window, renderer);
+    ImGui_ImplSDLRenderer3_Init(renderer);
 
+    bool done = false;
+    while (!done) {
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            ImGui_ImplSDL3_ProcessEvent(&event);
+            if (event.type == SDL_EVENT_QUIT)
+                done = true;
+        }
 
-int main()
-{	
-	Registry reg;
+        ImGui_ImplSDLRenderer3_NewFrame();
+        ImGui_ImplSDL3_NewFrame();
+        ImGui::NewFrame();
 
-	Entity e1 = reg.Create();
-	Entity e2 = reg.Create();
-	Entity e3 = reg.Create();
-	Entity e4 = reg.Create();
-	Entity e5 = reg.Create();
+        ImGui::Begin("Hello, world!");
+        ImGui::Text("Welcome to Dear ImGui with SDL3!");
+        ImGui::End();
 
-	decltype(auto) c1 = reg.Emplace<TestComp>(e1, 1.f, 1.f);
-	//decltype(auto) c2 = reg.Emplace<T3>(e1);
+        ImGui::Render();
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+        ImGui_ImplSDLRenderer3_RenderDrawData(ImGui::GetDrawData(), renderer);
+        SDL_RenderPresent(renderer);
+    }
 
-	reg.Emplace<TestComp>(e2, 2.f, 2.f);
-	reg.Emplace<T3>(e2);
+    ImGui_ImplSDLRenderer3_Shutdown();
+    ImGui_ImplSDL3_Shutdown();
+    ImGui::DestroyContext();
 
-	reg.Emplace<TestComp>(e3);
-	reg.Emplace<T3>(e3);
-	
-	reg.Emplace<T3>(e4);
-	reg.Emplace<T3>(e5);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
-	auto view = reg.View<TestComp, T3>();
-
-	for (auto e : view)
-	{
-		TestComp& c = view.Get<TestComp>(e);
-		std::cout << "yes";
-	}
-
-	reg.Destory(e1);
-
-	return 0;
+    return 0;
 }
