@@ -9,8 +9,16 @@ set(ECS_FILES
 	"ECS/ComponentManager.h" 
 )
 
+set(GAME_FILES
+	"Game/Game.h"
+	"Game/Game.cpp"
+	"Game/GameObject.h" 
+	
+ "Game/Component.h")
+
 target_sources(${PROJECT_NAME} PRIVATE 
 	${ECS_FILES} 
+	${GAME_FILES}
 	"main.cpp"
 )
 
