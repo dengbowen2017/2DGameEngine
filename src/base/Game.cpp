@@ -1,5 +1,8 @@
 #include "Game.h"
 
+#include "render/RenderSystem.h"
+#include "render/WindowSystem.h"
+
 #include <iostream>
 
 #include <SDL3/SDL.h>
@@ -7,25 +10,15 @@
 namespace VS
 {
 	Game::Game()
-        :window_(nullptr), renderer_(nullptr)
 	{
-	    if (!SDL_Init(SDL_INIT_VIDEO)) {
-            std::cerr << "Failed to init SDL: " << SDL_GetError() << std::endl;
-            return;
-        }
-
-        if (!SDL_CreateWindowAndRenderer("2D Game Engine", 800, 600, 0, &window_, &renderer_)) {
-            std::cerr << "Failed to create window and render: " << SDL_GetError() << std::endl;
-            SDL_Quit();
-            return;
-        }
+        window_system_ = std::make_unique<WindowSystem>();
+        render_system_ = std::make_unique<RenderSystem>(*window_system_);
 	}
 	
 	Game::~Game()
 	{
-        SDL_DestroyRenderer(renderer_);
-        SDL_DestroyWindow(window_);
-        SDL_Quit();
+        render_system_.reset();
+        window_system_.reset();
 	}
 
     void Game::Run()
@@ -52,10 +45,7 @@ namespace VS
 
     void Game::RenderUpdate(float dt)
     {
-        SDL_SetRenderDrawColor(renderer_, 0, 0, 0, 255);
-        SDL_RenderClear(renderer_);
-
-        SDL_RenderPresent(renderer_);
+        render_system_->Update(dt);
     }
 }
 

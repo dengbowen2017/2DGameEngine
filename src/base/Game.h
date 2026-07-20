@@ -1,10 +1,12 @@
 #pragma once
 
-class SDL_Window;
-class SDL_Renderer;
+#include <memory>
 
 namespace VS
 {
+	class RenderSystem;
+	class WindowSystem;
+
 	class Game
 	{
 	public:
@@ -18,8 +20,8 @@ namespace VS
 		void RenderUpdate(float dt);
 
 	private:
-		SDL_Window* window_;
-		SDL_Renderer* renderer_;
+		std::unique_ptr<RenderSystem> render_system_;
+		std::unique_ptr<WindowSystem> window_system_;
 
 		bool isRunning = true;
 	};

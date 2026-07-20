@@ -15,10 +15,17 @@ set(CORE_FILES
 	"base/main.cpp"
 )
 
+set(RENDER_FILES
+	"render/RenderSystem.h"
+	"render/RenderSystem.cpp"
+	"render/WindowSystem.h"
+	"render/WindowSystem.cpp"
+)
+
 target_sources(${PROJECT_NAME} PRIVATE 
 	${SCENE_FILES} 
 	${CORE_FILES}
-)
+	${RENDER_FILES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_SOURCE_DIR}/src
