@@ -1,25 +1,23 @@
 add_executable(${PROJECT_NAME})
 
-set(ECS_FILES
-	"ECS/Registry.h"
-	"ECS/Entity.h" 
-	"ECS/EntityManager.h" 
-	"ECS/ComponentPool.h" 
-	"ECS/View.h" 
-	"ECS/ComponentManager.h" 
+set(SCENE_FILES
+	"scene/ecs/Registry.h"
+	"scene/ecs/Entity.h" 
+	"scene/ecs/EntityManager.h" 
+	"scene/ecs/ComponentPool.h" 
+	"scene/ecs/View.h" 
+	"scene/ecs/ComponentManager.h"
 )
 
-set(GAME_FILES
-	"Game/Game.h"
-	"Game/Game.cpp"
-	"Game/GameObject.h" 
-	
- "Game/Component.h")
+set(CORE_FILES
+	"base/Game.h"
+	"base/Game.cpp"
+	"base/main.cpp"
+)
 
 target_sources(${PROJECT_NAME} PRIVATE 
-	${ECS_FILES} 
-	${GAME_FILES}
-	"main.cpp"
+	${SCENE_FILES} 
+	${CORE_FILES}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
