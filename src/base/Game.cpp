@@ -4,6 +4,7 @@
 #include "render/WindowSystem.h"
 
 #include <iostream>
+#include <thread>
 
 #include <SDL3/SDL.h>
 
@@ -23,8 +24,9 @@ namespace VS
 
     void Game::Run()
     {
-        SDL_Event event;
+        std::thread logic_thread = std::thread(&Game::LogicUpdate, this, 0);
 
+        SDL_Event event;
         while (isRunning) {
             // Move to InputSystem
             while (SDL_PollEvent(&event)) {
@@ -33,19 +35,24 @@ namespace VS
                 }
             }
 
-            LogicUpdate(0);
             RenderUpdate(0);
         }
+
+        logic_thread.join();
     }
 
     void Game::LogicUpdate(float dt)
     {
-
+        while (isRunning)
+        {
+            std::cout << "Logic" << std::endl;
+        }
     }
 
     void Game::RenderUpdate(float dt)
     {
         render_system_->Update(dt);
+        std::cout << "Render" << std::endl;
     }
 }
 

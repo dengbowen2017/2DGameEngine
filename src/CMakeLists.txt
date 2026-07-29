@@ -7,6 +7,7 @@ set(SCENE_FILES
 	"scene/ecs/ComponentPool.h" 
 	"scene/ecs/View.h" 
 	"scene/ecs/ComponentManager.h"
+	"scene/Component.h"
 )
 
 set(CORE_FILES
