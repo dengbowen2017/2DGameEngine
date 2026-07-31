@@ -14,7 +14,7 @@ add_subdirectory("src")
 
 # Lib for test
 add_library(ECS_lib INTERFACE)
-target_include_directories(ECS_lib INTERFACE "src/scene/ecs")
+target_include_directories(ECS_lib INTERFACE "src/core/ecs")
 
 add_subdirectory("tests")
 add_subdirectory("benchmark")

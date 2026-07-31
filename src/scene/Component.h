@@ -26,7 +26,5 @@ namespace GE
 
 		int renderLayer = 0;            // 渲染层级 (排序用，例如：0=背景, 1=角色, 2=UI)
 		bool visible = true;            // 是否显示
-
-		SDL_RenderTex
 	};
 }

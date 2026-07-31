@@ -1,16 +1,27 @@
 add_executable(${PROJECT_NAME})
 
-set(SCENE_FILES
-	"scene/ecs/Registry.h"
-	"scene/ecs/Entity.h" 
-	"scene/ecs/EntityManager.h" 
-	"scene/ecs/ComponentPool.h" 
-	"scene/ecs/View.h" 
-	"scene/ecs/ComponentManager.h"
-	"scene/Component.h"
+set(CORE_FILES
+	#ecs
+	"core/ecs/Registry.h"
+	"core/ecs/Entity.h" 
+	"core/ecs/EntityManager.h" 
+	"core/ecs/ComponentPool.h" 
+	"core/ecs/View.h" 
+	"core/ecs/ComponentManager.h"
+
+	#multithread
+	"core/multithread/SafeQueue.h"
+
+	#math
 )
 
-set(CORE_FILES
+set(SCENE_FILES
+	"scene/Component.h"
+	"scene/GameObject.h"
+	"scene/SceneSystem.h"
+)
+
+set(BASE_FILES
 	"base/Game.h"
 	"base/Game.cpp"
 	"base/main.cpp"
@@ -21,12 +32,15 @@ set(RENDER_FILES
 	"render/RenderSystem.cpp"
 	"render/WindowSystem.h"
 	"render/WindowSystem.cpp"
+	"render/FrameContext.h"
 )
 
 target_sources(${PROJECT_NAME} PRIVATE 
-	${SCENE_FILES} 
-	${CORE_FILES}
-	${RENDER_FILES})
+	${BASE_FILES}
+	${CORE_FILES} 
+	${SCENE_FILES}
+	${RENDER_FILES}
+)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_SOURCE_DIR}/src

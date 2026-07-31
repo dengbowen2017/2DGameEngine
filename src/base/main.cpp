@@ -75,8 +75,34 @@
 
 #include "Game.h"
 
+#include "core/multithread/SafeQueue.h"
+
+#include <thread>
+
 int main()
 {
-	VS::Game game;
-	game.Run();
+	VS::SafeQueue q;
+
+	std::thread logic_thread([&] {
+		while (true)
+		{
+			std::shared_ptr<VS::Task> new_task = std::make_shared<VS::Task>();
+			std::this_thread::sleep_for(std::chrono::seconds(1));
+			std::cout << "Task Created" << std::endl;
+			q.Push(new_task);
+		}
+	});
+
+	while (true)
+	{
+		auto task = q.Pop();
+		if (task)
+		{
+			task->Run();
+		}
+	}
+
+	return 0;
+	//VS::Game game;
+	//game.Run();
 }

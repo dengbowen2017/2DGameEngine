@@ -13,7 +13,9 @@ namespace VS
 	Game::Game()
 	{
         window_system_ = std::make_unique<WindowSystem>();
-        render_system_ = std::make_unique<RenderSystem>(*window_system_);
+        render_context_ = std::make_unique<FrameContext>();
+        render_system_ = std::make_unique<RenderSystem>(*window_system_, render_context_.get());
+        scene_system_ = std::make_unique<SceneSystem>(render_context_.get());
 	}
 	
 	Game::~Game()
@@ -24,7 +26,7 @@ namespace VS
 
     void Game::Run()
     {
-        std::thread logic_thread = std::thread(&Game::LogicUpdate, this, 0);
+        std::thread logic_thread = std::thread(&Game::LogicUpdate, this, 0.f);
 
         SDL_Event event;
         while (isRunning) {
