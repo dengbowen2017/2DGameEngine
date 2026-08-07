@@ -27,17 +27,19 @@ namespace VS
 		}
 	}
 
-	void RenderSystem::Update(float dt)
+	void RenderSystem::Update()
 	{
-		FrameResource& res = context_->GetRenderFrameResource();
-
 		SDL_SetRenderDrawColor(renderer_, 30, 30, 50, 255);
 		SDL_RenderClear(renderer_);
 
 		SDL_SetRenderDrawColor(renderer_, 255, 34, 100, 255);
-		for (size_t i = 0; i < res.sprites.size(); i++)
+
+		FrameResource* res = context_->GetReadyResource();
+		if (res)
 		{
-			SDL_RenderFillRect(renderer_, &res.sprites[i]);
+			SDL_RenderFillRects(renderer_, res->dst_rect.data(), res->dst_rect.size());
+			res->Clear();
+			context_->AddEmptyResource(res);
 		}
 
 		SDL_RenderPresent(renderer_);

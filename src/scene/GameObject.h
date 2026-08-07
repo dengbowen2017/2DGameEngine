@@ -3,7 +3,7 @@
 #include "ECS/Entity.h"
 #include "Game.h"
 
-namespace GE
+namespace VS
 {
 	class GameObject
 	{

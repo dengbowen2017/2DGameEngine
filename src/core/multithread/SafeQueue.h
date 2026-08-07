@@ -1,68 +1,60 @@
 #pragma once
 
-#include <iostream>
-#include <chrono>
 #include <queue>
 #include <mutex>
 #include <condition_variable>
 
 namespace VS
 {
-	class BaseTask
-	{
-	public:
-		virtual ~BaseTask() = default;
-		virtual void Run() = 0;
-	};
-
-	class Task : public BaseTask
-	{
-	public:
-		virtual void Run() override
-		{
-			InnerRun();
-		}
-		
-	private:
-		void InnerRun()
-		{
-			std::this_thread::sleep_for(std::chrono::seconds(2));
-			std::cout << "Task Complete" << std::endl;
-		}
-	};
-
+	template<typename T>
 	class SafeQueue
 	{
 	public:
-		SafeQueue() = default;
+		SafeQueue()
+			:is_stopped_(false)
+		{}
 
-		void Push(std::shared_ptr<BaseTask> task)
+		void Push(T* object)
 		{
-			std::unique_lock<std::mutex> lock(queue_mutex_);
-			queue_.push(task);
-			lock.unlock();
+			{
+				std::lock_guard<std::mutex> lock(queue_mutex_);
+				if (is_stopped_)
+				{
+					return;
+				}
+				queue_.push(object);
+			}
 			queue_condition_.notify_one();
 		}
 	
-		std::shared_ptr<BaseTask> Pop()
+		T* Pop()
 		{
 			std::unique_lock<std::mutex> lock(queue_mutex_);
-			queue_condition_.wait(lock, [this] {
-				return !queue_.empty();
-				});
+			queue_condition_.wait(lock, [this] {return !queue_.empty() || is_stopped_; });
 
-			std::shared_ptr<BaseTask> task;
-			if (!queue_.empty())
+			if (queue_.empty())
 			{
-				task = queue_.front();
-				queue_.pop();
+				return nullptr;
 			}
-			return task;
+
+			T* object = queue_.front();
+			queue_.pop();
+			return object;
+		}
+
+		void Stop()
+		{
+			{
+				std::lock_guard<std::mutex> lock(queue_mutex_);
+				is_stopped_ = true;
+			}
+			queue_condition_.notify_all();
 		}
 
 	private:
-		std::queue <std::shared_ptr<BaseTask>> queue_;
+		std::queue <T*> queue_;
 		std::mutex queue_mutex_;
 		std::condition_variable queue_condition_;
+		bool is_stopped_;
 	};
 }

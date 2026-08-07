@@ -14,7 +14,7 @@ namespace VS
 		RenderSystem(const WindowSystem& window_system, FrameContext* context);
 		~RenderSystem();
 
-		void Update(float dt);
+		void Update();
 
 	private:
 		SDL_Renderer* renderer_;

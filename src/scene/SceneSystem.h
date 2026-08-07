@@ -1,5 +1,8 @@
 #pragma once
 
+#include <thread>
+#include <chrono>
+
 #include "render/FrameContext.h"
 
 namespace VS
@@ -11,15 +14,20 @@ namespace VS
 			:context_(context)
 		{}
 
-		void Update()
+		void Update(float dt)
 		{
-			FrameResource& res = context_->GetLogicFrameResource();
-			res.sprites.clear();
-			res.sprites.emplace_back(100.f, 100.f, 100.f, 100.f);
-			res.sprites.emplace_back(300.f, 100.f, 100.f, 100.f);
-			res.sprites.emplace_back(300.f, 300.f, 100.f, 100.f);
+			FrameResource* res = context_->GetEmptyResource();
+			
+			if (res)
+			{
+				for (size_t i = 0; i < 100000; i++)
+				{
+					SDL_FRect dst_rect = { 100, 100, 50, 50 };
+					res->dst_rect.push_back(dst_rect);
+				}
 
-			context_->SwapContext();
+				context_->AddReadyResource(res);
+			}
 		}
 
 	private:
