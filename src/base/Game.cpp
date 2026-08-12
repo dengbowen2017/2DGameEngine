@@ -7,6 +7,7 @@
 #include <thread>
 
 #include <SDL3/SDL.h>
+#include <spdlog/spdlog.h>
 
 namespace VS
 {
@@ -58,7 +59,8 @@ namespace VS
     void Game::RenderUpdate()
     {
         float dt = CalcDeltaTime(last_render_update_time_);
-        std::cout << "FPS:" << 1 / dt << std::endl;
+        spdlog::info("FPS: {}", 1 / dt);
+        //std::cout << "FPS:" << 1 / dt << std::endl;
         render_system_->Update();
     }
 

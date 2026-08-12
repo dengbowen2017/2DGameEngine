@@ -48,7 +48,10 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL3::SDL3
+	SDL3_image::SDL3_image
+	SDL3_ttf::SDL3_ttf
 	imgui
+	spdlog::spdlog
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
