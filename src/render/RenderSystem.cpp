@@ -1,10 +1,10 @@
 #include "RenderSystem.h"
-
 #include "WindowSystem.h"
 
 #include <iostream>
-
 #include <SDL3/SDL.h>
+
+#include "base/timer/Timer.h"
 
 namespace VS
 {
@@ -37,6 +37,7 @@ namespace VS
 		FrameResource* res = context_->GetReadyResource();
 		if (res)
 		{
+			PROFILE_SCOPE("RenderRects");
 			SDL_RenderFillRects(renderer_, res->dst_rect.data(), res->dst_rect.size());
 			res->Clear();
 			context_->AddEmptyResource(res);

@@ -3,7 +3,6 @@
 #include "render/RenderSystem.h"
 #include "render/WindowSystem.h"
 
-#include <iostream>
 #include <thread>
 
 #include <SDL3/SDL.h>
@@ -12,8 +11,7 @@
 namespace VS
 {
 	Game::Game()
-        :last_logic_update_time_{ std::chrono::steady_clock::now() }, 
-        last_render_update_time_{ std::chrono::steady_clock::now() }
+        :frame_count_(0), elapsed_(0.0f)
 	{
         window_system_ = std::make_unique<WindowSystem>();
         frame_context_ = std::make_unique<FrameContext>();
@@ -51,27 +49,32 @@ namespace VS
     {
         while (isRunning)
         {
-            float dt = CalcDeltaTime(last_logic_update_time_);
+            float dt = logic_timer_.Elapsed();
+            logic_timer_.Reset();
             scene_system_->Update(dt);
         }
     }
 
     void Game::RenderUpdate()
     {
-        float dt = CalcDeltaTime(last_render_update_time_);
-        spdlog::info("FPS: {}", 1 / dt);
-        //std::cout << "FPS:" << 1 / dt << std::endl;
+        CalcFPS();
         render_system_->Update();
     }
 
-    float Game::CalcDeltaTime(std::chrono::steady_clock::time_point& last_time)
+    void Game::CalcFPS()
     {
-        float dt = 0;
-        std::chrono::time_point now_time_point = std::chrono::steady_clock::now();
-        std::chrono::duration<float> time_span = now_time_point - last_time;
-        dt = time_span.count();
-        last_time = now_time_point;
-        return dt;
+        float dt = render_timer_.Elapsed();
+        render_timer_.Reset();
+
+        frame_count_++;
+        elapsed_ += dt;
+
+        if (elapsed_ >= 1.0f)
+        {
+            spdlog::info("FPS: {}", frame_count_ / elapsed_);
+            frame_count_ = 0;
+            elapsed_ = 0;
+        }
     }
 }
 

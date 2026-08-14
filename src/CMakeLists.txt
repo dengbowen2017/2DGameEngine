@@ -25,7 +25,7 @@ set(BASE_FILES
 	"base/Game.h"
 	"base/Game.cpp"
 	"base/main.cpp"
-)
+ "base/timer/Timer.h")
 
 set(RENDER_FILES
 	"render/RenderSystem.h"
@@ -40,7 +40,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 	${CORE_FILES} 
 	${SCENE_FILES}
 	${RENDER_FILES}
-)
+ "base/timer/Timer.h")
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_SOURCE_DIR}/src

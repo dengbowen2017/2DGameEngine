@@ -5,6 +5,7 @@
 
 #include <SDL3/SDL.h>
 
+#include "base/timer/Timer.h"
 #include "core/multithread/SafeQueue.h"
 
 namespace VS
@@ -47,11 +48,13 @@ namespace VS
 
 		FrameResource* GetEmptyResource()
 		{
+			PROFILE_FUNC();
 			return empty_queue_.Pop();
 		}
 
 		FrameResource* GetReadyResource()
 		{
+			PROFILE_FUNC();
 			return ready_queue_.Pop();
 		}
 
