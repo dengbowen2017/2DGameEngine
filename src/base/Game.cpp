@@ -2,6 +2,7 @@
 
 #include "render/RenderSystem.h"
 #include "render/WindowSystem.h"
+#include "input/InputSystem.h"
 
 #include <thread>
 
@@ -15,8 +16,9 @@ namespace VS
 	{
         window_system_ = std::make_unique<WindowSystem>();
         frame_context_ = std::make_unique<FrameContext>();
-        render_system_ = std::make_unique<RenderSystem>(*window_system_, frame_context_.get());
-        scene_system_ = std::make_unique<SceneSystem>(frame_context_.get());
+        input_system_ = std::make_unique<InputSystem>();
+        render_system_ = std::make_unique<RenderSystem>(window_system_.get(), frame_context_.get());
+        scene_system_ = std::make_unique<SceneSystem>(input_system_.get(), frame_context_.get());
 	}
 	
 	Game::~Game()
@@ -29,16 +31,15 @@ namespace VS
     {
         std::thread logic_thread = std::thread(&Game::LogicUpdate, this);
 
-        SDL_Event event;
         while (isRunning) {
             RenderUpdate();
 
-            // Move to InputSystem
-            while (SDL_PollEvent(&event)) {
-                if (event.type == SDL_EVENT_QUIT) {
-                    isRunning = false;
-                    frame_context_->Stop();
-                }
+            input_system_->Update();
+
+            if (input_system_->IsQuit())
+            {
+                isRunning = false;
+                frame_context_->Stop();
             }
         }
 

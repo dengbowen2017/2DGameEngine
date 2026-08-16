@@ -21,7 +21,7 @@ FetchContent_Declare(
     GIT_SHALLOW     TRUE
     EXCLUDE_FROM_ALL
 )
-FetchContent_MakeAvailable(SDL_ttf)
+#FetchContent_MakeAvailable(SDL_ttf)
 
 #SDL_image
 set(SDLIMAGE_VENDORED ON CACHE BOOL "" FORCE)
@@ -35,4 +35,4 @@ FetchContent_Declare(
     GIT_SHALLOW    TRUE
     EXCLUDE_FROM_ALL
 )
-FetchContent_MakeAvailable(SDL3_image)
+#FetchContent_MakeAvailable(SDL3_image)

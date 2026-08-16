@@ -11,7 +11,7 @@ namespace VS
 	class RenderSystem
 	{
 	public:
-		RenderSystem(const WindowSystem& window_system, FrameContext* context);
+		RenderSystem(WindowSystem* window_system, FrameContext* context);
 		~RenderSystem();
 
 		void Update();

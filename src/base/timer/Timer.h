@@ -5,6 +5,7 @@
 #include <spdlog/spdlog.h>
 
 //#define PROFILING
+
 #ifdef PROFILING
 #define PROFILE_SCOPE(name)	ProfileTimer timer(name)
 #define PROFILE_FUNC() PROFILE_SCOPE(__FUNCTION__)

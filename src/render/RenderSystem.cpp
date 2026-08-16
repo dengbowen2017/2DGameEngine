@@ -8,10 +8,10 @@
 
 namespace VS
 {
-	RenderSystem::RenderSystem(const WindowSystem& window_system, FrameContext* context)
+	RenderSystem::RenderSystem(WindowSystem* window_system, FrameContext* context)
 		:renderer_(nullptr), context_(context)
 	{
-		renderer_ = SDL_CreateRenderer(window_system.GetWindowHandle(), nullptr);
+		renderer_ = SDL_CreateRenderer(window_system->GetWindowHandle(), nullptr);
 		if (!renderer_)
 		{
 			std::cerr << "Failed to create SDL_Renderer: " << SDL_GetError() << std::endl;

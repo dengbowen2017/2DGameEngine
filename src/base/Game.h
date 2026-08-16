@@ -11,6 +11,7 @@ namespace VS
 {
 	class RenderSystem;
 	class WindowSystem;
+	class InputSystem;
 
 	class Game
 	{
@@ -31,6 +32,7 @@ namespace VS
 		std::unique_ptr<WindowSystem> window_system_;
 		std::unique_ptr<SceneSystem> scene_system_;
 		std::unique_ptr<FrameContext> frame_context_;
+		std::unique_ptr<InputSystem> input_system_;
 
 		bool isRunning = true;
 

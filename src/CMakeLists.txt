@@ -25,7 +25,14 @@ set(BASE_FILES
 	"base/Game.h"
 	"base/Game.cpp"
 	"base/main.cpp"
- "base/timer/Timer.h")
+
+	# timer
+	"base/timer/Timer.h"
+	
+	# input
+	"base/input/InputSystem.h"
+	"base/input/InputSystem.cpp"
+)
 
 set(RENDER_FILES
 	"render/RenderSystem.h"
@@ -48,8 +55,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
 	SDL3::SDL3
-	SDL3_image::SDL3_image
-	SDL3_ttf::SDL3_ttf
+#	SDL3_image::SDL3_image
+#	SDL3_ttf::SDL3_ttf
 	imgui
 	spdlog::spdlog
 )
