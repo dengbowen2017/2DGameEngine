@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_map>
+#include <string>
 
 namespace VS
 {
@@ -12,12 +13,13 @@ namespace VS
 		void Update();
 		bool IsQuit() const { return is_quit_; }
 
-		bool GetKey(const char* key_name);
+		bool GetKey(const std::string& key_name);
+
 	private:
 		void RegisterKeys();
 
 		const bool* key_state_;
-		std::unordered_map<const char*, int> key_map_;
+		std::unordered_map<std::string, int> key_map_;
 		bool is_quit_;
 	};
 }

@@ -1,6 +1,7 @@
 #include "InputSystem.h"
 
 #include <SDL3/SDL.h>
+#include <spdlog/spdlog.h>
 
 namespace VS
 {
@@ -21,7 +22,7 @@ namespace VS
 		}
 	}
 
-	bool InputSystem::GetKey(const char* key_name)
+	bool InputSystem::GetKey(const std::string& key_name)
 	{
 		return key_state_[key_map_[key_name]];
 	}

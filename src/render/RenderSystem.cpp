@@ -4,7 +4,7 @@
 #include <iostream>
 #include <SDL3/SDL.h>
 
-#include "base/timer/Timer.h"
+#include "base/Timer.h"
 
 namespace VS
 {

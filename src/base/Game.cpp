@@ -2,7 +2,7 @@
 
 #include "render/RenderSystem.h"
 #include "render/WindowSystem.h"
-#include "input/InputSystem.h"
+#include "InputSystem.h"
 
 #include <thread>
 
@@ -33,21 +33,26 @@ namespace VS
 
         while (isRunning) {
             RenderUpdate();
-
-            input_system_->Update();
-
-            if (input_system_->IsQuit())
-            {
-                isRunning = false;
-                frame_context_->Stop();
-            }
+            InputUpdate();
         }
 
         logic_thread.join();
     }
 
+    void Game::InputUpdate()
+    {
+        input_system_->Update();
+
+        if (input_system_->IsQuit())
+        {
+            isRunning = false;
+            frame_context_->Stop();
+        }
+    }
+
     void Game::LogicUpdate()
     {
+        // TODO: redesign synchronization
         while (isRunning)
         {
             float dt = logic_timer_.Elapsed();

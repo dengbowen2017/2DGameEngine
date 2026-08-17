@@ -5,7 +5,7 @@
 
 #include "render/FrameContext.h"
 #include "scene/SceneSystem.h"
-#include "base/timer/Timer.h"
+#include "base/Timer.h"
 
 namespace VS
 {
@@ -22,6 +22,7 @@ namespace VS
 		void Run();
 
 	private:
+		void InputUpdate();
 		void LogicUpdate();
 		void RenderUpdate();
 		

@@ -1,37 +1,29 @@
 add_executable(${PROJECT_NAME})
 
 set(CORE_FILES
-	#ecs
 	"core/ecs/Registry.h"
 	"core/ecs/Entity.h" 
 	"core/ecs/EntityManager.h" 
 	"core/ecs/ComponentPool.h" 
 	"core/ecs/View.h" 
 	"core/ecs/ComponentManager.h"
-
-	#multithread
 	"core/multithread/SafeQueue.h"
-
-	#math
 )
 
 set(SCENE_FILES
 	"scene/Component.h"
 	"scene/GameObject.h"
 	"scene/SceneSystem.h"
+	"scene/SceneSystem.cpp"
 )
 
 set(BASE_FILES
 	"base/Game.h"
 	"base/Game.cpp"
 	"base/main.cpp"
-
-	# timer
-	"base/timer/Timer.h"
-	
-	# input
-	"base/input/InputSystem.h"
-	"base/input/InputSystem.cpp"
+	"base/Timer.h"
+	"base/InputSystem.h"
+	"base/InputSystem.cpp"
 )
 
 set(RENDER_FILES
@@ -47,7 +39,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 	${CORE_FILES} 
 	${SCENE_FILES}
 	${RENDER_FILES}
- "base/timer/Timer.h")
+)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
 	${CMAKE_SOURCE_DIR}/src
